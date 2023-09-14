@@ -1,9 +1,13 @@
 import { StoreStatusEnum } from "@/src/commons/StoreStatusEnum";
 import { parseJwt } from "@/src/utils/jwt";
-import { ILoginResponse, LoginService } from "@/src/services/auth/authlogin.service";
+import {
+  ILoginResponse,
+  LoginService,
+} from "@/src/services/auth/authlogin.service";
 import { ITokenInfo } from "@/src/types/auth/ITokenInfo";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { ILoginFormData } from "@/src/types/auth/ILoginFormData";
+import { RefreshService } from "@/src/services/auth/authRefresh.service";
 
 interface AuthStoreState {
   status: StoreStatusEnum;
@@ -34,37 +38,74 @@ export const login = createAsyncThunk(
     const accesstokenstr = parseJwt(res.data!.access);
     const refreshtokenstr = parseJwt(res.data!.refresh);
     const tokenInfo: ITokenInfo = {
-        accessToken: res.data!.access,
-        refreshToken: res.data!.refresh,
-        accessExpiresIn: accesstokenstr.exp,
-        refreshExpiresIn: refreshtokenstr.exp,
-        userId: accesstokenstr.user_id,
-        message: res.message,
+      accessToken: res.data!.access,
+      refreshToken: res.data!.refresh,
+      accessExpiresIn: accesstokenstr.exp,
+      refreshExpiresIn: refreshtokenstr.exp,
+      userId: accesstokenstr.user_id,
+      message: res.message,
     };
     return tokenInfo;
+  }
+);
+
+export const refresh = createAsyncThunk(
+  "auth/refresh",
+  async (token: string, thunkApi) => {
+    const res: ILoginResponse = await RefreshService(token);
+    if (res.status != 200) {
+      return thunkApi.rejectWithValue(res.message);
+    }
+    const accesstokenstr = parseJwt(res.data!.access);
+    const refreshtokenstr = parseJwt(res.data!.refresh);
+    const response: ITokenInfo = {
+      accessToken: res.data!.access,
+      refreshToken: res.data!.refresh,
+      accessExpiresIn: accesstokenstr.exp,
+      refreshExpiresIn: refreshtokenstr.exp,
+      userId: accesstokenstr.user_id,
+      message: res.message,
+    };
+    return response;
   }
 );
 
 const AuthSlice = createSlice({
   name: "auth",
   initialState: initialState,
-  reducers: {
-  },
+  reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(login.fulfilled, ( state, action ) => {
-      state.status = StoreStatusEnum.SUCCESS;
-      state.message = action.payload.message;
-      state.accessToken = action.payload.accessToken;
-      state.refreshToken = action.payload.refreshToken;
-      state.accessExpiresIn = action.payload.accessExpiresIn;
-      state.refreshExpiresIn = action.payload.refreshExpiresIn;
-      state.userId = action.payload.userId;
+    builder.addCase(login.pending, (state) => {
+      state.status = StoreStatusEnum.LOADING;
+      state.message = "Pending";
     }),
-      builder.addCase(login.pending, ( state ) => {
-        state.status = StoreStatusEnum.LOADING;
-        state.message = "Pending"
+      builder.addCase(login.fulfilled, (state, action) => {
+        state.status = StoreStatusEnum.SUCCESS;
+        state.message = action.payload.message;
+        state.accessToken = action.payload.accessToken;
+        state.refreshToken = action.payload.refreshToken;
+        state.accessExpiresIn = action.payload.accessExpiresIn;
+        state.refreshExpiresIn = action.payload.refreshExpiresIn;
+        state.userId = action.payload.userId;
       }),
-      builder.addCase(login.rejected, ( state ) => {
+      builder.addCase(login.rejected, (state) => {
+        state.status = StoreStatusEnum.ERROR;
+        state.message = "Error";
+      }),
+      builder.addCase(refresh.pending, (state) => {
+        state.status = StoreStatusEnum.LOADING;
+        state.message = "Pending";
+      }),
+      builder.addCase(refresh.fulfilled, (state, action) => {
+        state.status = StoreStatusEnum.SUCCESS;
+        state.message = action.payload.message;
+        state.accessToken = action.payload.accessToken;
+        state.refreshToken = action.payload.refreshToken;
+        state.accessExpiresIn = action.payload.accessExpiresIn;
+        state.refreshExpiresIn = action.payload.refreshExpiresIn;
+        state.userId = action.payload.userId;
+      }),
+      builder.addCase(refresh.rejected, (state) => {
         state.status = StoreStatusEnum.ERROR;
         state.message = "Error";
       });

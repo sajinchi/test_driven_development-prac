@@ -1,6 +1,11 @@
 # Services
 These are all stored inside services in app folder which is inside src folder.Further they are categorized according to their modules.
 
+## Services for Auth
+Names of the services for Auth related operations are:
+1. For Login
+> LoginService
+
 ## Services for Product
 Names of the services for product related operations are:
 1. For Getting All Products

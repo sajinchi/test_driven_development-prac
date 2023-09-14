@@ -16,7 +16,7 @@ export const parseJwt = (token:string) => {
     return JSON.parse(jsonPayload);
 }
 
-// export const timeIsValid = (time:number) => Date.now() < time*1000 ? true : false;
+export const timeIsValid = (time:number) => Date.now() < time*1000 ? true : false;
 
 
 
