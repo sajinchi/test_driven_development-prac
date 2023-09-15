@@ -1,23 +1,8 @@
-import { useEffect, useState } from "react";
-
 import { Delete, Detail, Update } from ".";
 import { IProduct } from "@/src/types/product/IProduct";
-import { ProductGetResponse, ProductGetService } from "@/src/services/product/productGet.service";
 import { Table, TableBody, TableDataColumn, TableHeadColumn, TableHeader, TableRow } from "@/src/components/table";
 
-const List = () => {
-  const [product, setProduct] = useState<IProduct[]>();
-
-  const getProduct = async () => {
-    const response: ProductGetResponse = await ProductGetService();
-      setProduct(response.data);
-  };
-
-  useEffect(() => {
-    getProduct();
-  }, []);
-
-
+const List = (props:{ products:IProduct[]}) => {
   return (
     <>
       <Table>
@@ -32,7 +17,7 @@ const List = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {product?.map((pro) => {
+          {props.products.map((pro) => {
             let singledata:IProduct ={
               active: pro.active,
               amount: pro.amount,

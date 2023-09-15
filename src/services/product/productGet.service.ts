@@ -5,7 +5,7 @@ import { INetwortRequestResponseState } from "@/src/types/INetworkRequestRespons
 
 
 export interface ProductGetResponse extends INetwortRequestResponseState {
-  data?: IProduct[];
+  data: IProduct[];
 }
 
 export const ProductGetService = async () => {
@@ -22,12 +22,14 @@ export const ProductGetService = async () => {
       const result: ProductGetResponse = {
         status: error.response!.status,
         message: error.response!.data.detail,
+        data: []
       };
       return result;
     } else {
       const result: ProductGetResponse = {
         status: 400,
         message: "Unknown Error",
+        data: [],
       };
       return result;
     }

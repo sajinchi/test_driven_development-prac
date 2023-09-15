@@ -4,7 +4,7 @@ import { INetwortRequestResponseState } from "@/src/types/INetworkRequestRespons
 import { IPackage } from "@/src/types/package/IPackage";
 
 export interface PackageGetResponse extends INetwortRequestResponseState {
-  data?: IPackage[];
+  data: IPackage[];
 }
 
 export const PackageGetService = async () => {
@@ -21,12 +21,14 @@ export const PackageGetService = async () => {
       const result: PackageGetResponse = {
         status: error.response!.status,
         message: error.response!.data.detail,
+        data: []
       };
       return result;
     } else {
       const result: PackageGetResponse = {
         status: 400,
         message: "Unknown Error",
+        data: []
       };
       return result;
     }

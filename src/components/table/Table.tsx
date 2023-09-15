@@ -5,7 +5,7 @@ interface TableProps {
 function Table(props: TableProps) {
 
     return (
-      <table>
+      <table className="font-poppins odd:bg-white even:dark:bg-slate-300">
         { props.children }
       </table>
     );

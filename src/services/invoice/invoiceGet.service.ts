@@ -5,7 +5,7 @@ import { INetwortRequestResponseState } from "@/src/types/INetworkRequestRespons
 
 
 export interface InvoiceGetResponse extends INetwortRequestResponseState {
-  data?: IInvoice[];
+  data: IInvoice[];
 }
 
 export const InvoiceGetService = async () => {
@@ -22,12 +22,14 @@ export const InvoiceGetService = async () => {
       const result: InvoiceGetResponse = {
         status: error.response!.status,
         message: error.response!.data.detail,
+        data: []
       };
       return result;
     } else {
       const result: InvoiceGetResponse = {
         status: 400,
         message: "Unknown Error",
+        data: []
       };
       return result;
     }

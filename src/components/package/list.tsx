@@ -2,25 +2,12 @@ import React, { useEffect, useState } from 'react'
 
 import { Delete, Detail, Update } from '.';
 import { IPackage } from '@/src/types/package/IPackage';
-import { PackageGetService } from '@/src/services/package/packageGet.service';
 import { Table, TableHeader, TableRow, TableHeadColumn, TableBody, TableDataColumn } from '../table';
 
-const List = () => {
-    const [pack, setPack] = useState<IPackage[]>()
-    const getPackage = async() => {
-        const response = await PackageGetService();
-        if (response.status == 200){
-            setPack(response.data);
-        }
-    }
-
-    useEffect(()=>{
-        getPackage();
-    },[]);
+const List = (props:{packages:IPackage[]}) => {
   return (
     <div>
         <Table>
-        {/* <TableCaption>Foo bar baz</TableCaption> */}
         <TableHeader>
           <TableRow>
             <TableHeadColumn>ID</TableHeadColumn>
@@ -32,7 +19,7 @@ const List = () => {
         </TableHeader>
         <TableBody>
 
-      {pack?.map((pack)=>{
+      {props.packages.map((pack)=>{
         let singledata:IPackage ={
             amount: pack.amount,
             description: pack.description,

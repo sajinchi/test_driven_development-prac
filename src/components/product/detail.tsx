@@ -67,13 +67,15 @@ const Detail = (props: { data: IProduct }) => {
                   </Dialog.Title>
                   <div className="mt-2">
                     <div className="bg-white font-Poppins p-9">
-                        <div className="flex items-center justify-center"><Image
+                        <div className="flex items-center  justify-center">
+                          <Image
                                 src={imageurl}
                                 height={250}
                                 width={250}
                                 alt={""}
                                 className="p-3 border"
-                              /></div>
+                              />
+                            </div>
                       <div className="flex flex-row items-center justify-center space-x-2 px-6 py-3 border">
                         {props.data?.images.map((image) => {
                           return (
