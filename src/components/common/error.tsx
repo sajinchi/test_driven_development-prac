@@ -2,7 +2,7 @@ import React from 'react'
 
 const Error = (props:{message:string}) => {
   return (
-    <div className='flex flex-grow items-center justify-center'>
+    <div className='flex items-center justify-center'>
       {props.message}
     </div>
   )

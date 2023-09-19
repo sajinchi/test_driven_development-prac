@@ -28,7 +28,7 @@ const Invoice = () => {
   useEffect(() => {
     getInvoice();
   }, []);
-
+  
   return (
     <>
     <div className="flex flex-row">
